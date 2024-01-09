@@ -4,7 +4,8 @@ import Image from "next/image";
 import { Rating } from "@mui/material";
 import { formatPrice } from "@/utils/formatPrice";
 import { useCallback, useState } from "react";
-import setColor from "@/app/components/products/SetColor";
+import SetColor from "@/app/components/products/SetColor";
+
 
 interface ProductDetailsProps {
     product: any;
@@ -31,8 +32,7 @@ const HorizontalLine = () => {
     return <hr className="w-[30%] my-2"/>
 };
 
-const ProductDetails:React.FC<ProductDetailsProps> = ({product}
-    ) => {
+const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
 
     const [cartProduct, setCartProduct] = useState<CartProductType>({
         id:product.id,
@@ -45,12 +45,16 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}
         price:product.price
     });
 
+    console.log('cartProduct',cartProduct)
 
     const ProductRating = product.reviews.reduce((acc:number, item:any) => item.rating + acc, 0) / product.reviews.length
 
-    const handColorSelect = useCallback((value:selectedImgType) => {},[cartProduct.selectedImg]);
+    const handleColorSelect = useCallback((value:selectedImgType) => 
+    {setCartProduct((prev)=> {
+        return {...prev, selectedImg:value}
+    })},[cartProduct.selectedImg]);
         
-    }
+    
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -83,18 +87,16 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}
                 </div>
                 <div className={product.inStock ? 'text-teal-400':'text-rose-400'}>{product.inStock?'In stock' : 'Out of stock'}</div>
                 <HorizontalLine/>
-                <setColor
-                    cartProduct={cartProduct},
-                    images={product.images},
-                    handColorSelect={handleColorSelect}
+                <SetColor
+                    cartProduct={cartProduct} images={product.images} handleColorSelect={handleColorSelect}
                 /> 
-                <HorizontalLine/>
+                <HorizontalLine/> 
                 <div>Quantity</div>
                 <HorizontalLine/>
                 <div>Add to cart button</div>
             </div>
         </div>
     )
-}
+};
 
 export default ProductDetails;
