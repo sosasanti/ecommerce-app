@@ -6,6 +6,8 @@ import { formatPrice } from "@/utils/formatPrice";
 import { useCallback, useState } from "react";
 import SetColor from "@/app/components/products/SetColor";
 import SetQuantity from "@/app/components/products/SetQuantity";
+import CustomButton from "@/app/components/Button";
+import ProductImage from "@/app/components/products/ProductImage";
 
 
 interface ProductDetailsProps {
@@ -55,19 +57,21 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
         return {...prev, selectedImg:value}
     })},[cartProduct.selectedImg]);
         
-    const handleQuantityIncrease = useCallback(() => {},[])
-    const handleQuantityDecrease = useCallback(() => {},[])
+    const handleQuantityIncrease = useCallback(() => {
+        setCartProduct((prev)=> {
+            return {...prev, quantity: prev.quantity === 99 ? 99 : prev.quantity + 1}
+        })
+    },[cartProduct])
+
+    const handleQuantityDecrease = useCallback(() => {
+        setCartProduct((prev)=> {
+            return {...prev, quantity: prev.quantity === 0 ? 0 : prev.quantity - 1};
+        })
+    },[cartProduct])
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="aspect-square overflow-hidden relative w-full">
-                <Image
-                    fill
-                    src={product.images[0].image}
-                    alt={product.name}
-                    className="w-full h-full object-contain"
-                />
-            </div>
+            <ProductImage cartProduct={cartProduct} product={product} handleColorSelect={handleColorSelect}/>
             <div className="flex flex-col gap-1 text-slate-500 text-sm">
                 <h2 className="text-3xl font-medium text-slate-700">{product.name}</h2>
                 <div className="text-2xl font-medium text-slate-700">{formatPrice(product.price)}</div>
@@ -94,13 +98,17 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
                 /> 
                 <HorizontalLine/> 
                 <SetQuantity 
-                cartProduct={cartProduct} 
-                handleQuantityIncrease={handleQuantityIncrease} 
-                handleQuantityDecrease={handleQuantityDecrease}
-                setCartProduct={setCartProduct}
+                    cartProduct={cartProduct} 
+                    handleQuantityIncrease={handleQuantityIncrease} 
+                    handleQuantityDecrease={handleQuantityDecrease}
                 />
                 <HorizontalLine/>
-                <div>Add to cart button</div>
+                <div className="max-w-[300px]">
+                    <CustomButton
+                    label = "Add to cart"
+                    onClick = {() => {}}
+                    />
+                </div>
             </div>
         </div>
     )
