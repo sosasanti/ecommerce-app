@@ -8,6 +8,7 @@ import SetColor from "@/app/components/products/SetColor";
 import SetQuantity from "@/app/components/products/SetQuantity";
 import CustomButton from "@/app/components/Button";
 import ProductImage from "@/app/components/products/ProductImage";
+import { useCart } from "@/hooks/useCart";
 
 
 interface ProductDetailsProps {
@@ -37,6 +38,7 @@ const HorizontalLine = () => {
 
 const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
 
+    //const {cartTotalQty} = useCart();
     const [cartProduct, setCartProduct] = useState<CartProductType>({
         id:product.id,
         name:product.name,
@@ -48,7 +50,7 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
         price:product.price
     });
 
-    console.log('cartProduct',cartProduct)
+    //console.log('cartProduct',cartTotalQty)
 
     const ProductRating = product.reviews.reduce((acc:number, item:any) => item.rating + acc, 0) / product.reviews.length
 
